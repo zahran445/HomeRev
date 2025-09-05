@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home-Rev Registration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/regstyles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h2>Registration Form</h2>
+            <form method="post">
+                <div class="input-group">
+                    <input name="username" type="text" placeholder="Your Name" required>
+                    <input name="email" type="email" placeholder="Your Email" required>
+                </div>
+                <div class="input-group">
+                    <input name="password" type="password" placeholder="Your Password" required>
+                    <input type="password" placeholder="Confirm Password" required>
+                </div>
+                <button type="submit">Register</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
