@@ -1,0 +1,53 @@
+<style>
+     header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .site-name {
+            font-size: 28px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        nav a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #007799;
+        }
+
+        nav .btn {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        nav .btn:hover {
+            background-color: #555;
+        }
+
+</style>
+
+<header>
+    <div class="left-menu">
+        <span class="site-name">Home-Rev</span>
+    </div>
+    <nav class="right-menu">
+        <a href="{{ url_for('logout') }}">Logout</a>
+       </nav>
+</header>

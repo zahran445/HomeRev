@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Redesign Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='homestyle.css') }}">
+    <style>
+        /* General styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* Title styling */
+        h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        /* Image container styling */
+        .image-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+        .image-container img {
+            width: 100%;
+            max-width: 350px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+        .image-container img:hover {
+            transform: scale(1.02);
+        }
+
+        /* Image title styling */
+        .image-title {
+            font-size: 18px;
+            color: #666;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Room Redesign Result</h1>
+        <div class="image-container">
+            <div>
+                <h2 class="image-title">Original Room</h2>
+                <img src="{{ url_for('static', filename='uploads/' + original_filename) }}" alt="Original Room">
+            </div>
+            <div>
+                <h2 class="image-title">Redesigned Room</h2>
+                <img src="{{ url_for('static', filename='outputs/' + redesigned_filename) }}" alt="Redesigned Room">
+            </div>
+        </div>
+    </div>
+</body>
+</html>

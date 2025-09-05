@@ -1,0 +1,88 @@
+<style>
+    header {
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           padding: 20px 40px;
+           background-color: #ffffff;
+           border-bottom: 1px solid #ddd;
+       }
+
+       .site-name {
+           font-size: 28px;
+           font-weight: 600;
+           color: #000;
+       }
+
+       nav a {
+           margin-left: 20px;
+           text-decoration: none;
+           color: #333;
+           font-weight: 500;
+           font-size: 16px;
+           transition: color 0.3s ease;
+       }
+
+       nav a:hover {
+           color: #007799;
+       }
+
+       nav .btn {
+           background-color: #333;
+           color: #fff;
+           padding: 10px 20px;
+           border-radius: 30px;
+           border: none;
+           font-weight: 500;
+           transition: background-color 0.3s ease;
+       }
+
+       nav .btn:hover {
+           background-color: #555;
+       }
+
+</style>
+
+<header>
+   <div class="left-menu">
+       <span class="site-name">Home-Rev</span>
+   </div>
+   <nav class="right-menu">
+       <a href="{{ url_for('logout') }}">Logout</a>
+      </nav>
+</header><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Your Home</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Add your CSS file -->
+</head>
+<body>
+    <header>
+        <h1>Design Your Home</h1>
+        <nav>
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </nav>
+    </header>
+    
+    <main>
+        <h2>Available Designs</h2>
+        <div class="product-list">
+            {% for product in products %}
+            <div class="product-card">
+                <img src="{{ product.image_path }}" alt="{{ product.name }}">
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.description }}</p>
+                <p>Price: ${{ product.price }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 Your Website</p>
+    </footer>
+</body>
+</html>
