@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - Home-Rev</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f6f4; /* Light background */
+        }
+
+        /* Header Section */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .site-name {
+            font-size: 28px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        nav a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        nav .btn {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        nav .btn:hover {
+            background-color: #555;
+        }
+
+        /* Portfolio Section */
+        .portfolio-container {
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .portfolio-header {
+            font-size: 36px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .profile-box {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+            text-align: center;
+            width: 80%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .profile-box h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .profile-box p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .profile-box form {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .button {
+            background-color: #333;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 30px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        .button:hover {
+            background-color: #555;
+        }
+
+        .project-box {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .project-card {
+            background-color: #fff;
+            width: 300px;
+            margin: 15px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .project-card img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .project-card h3 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .project-card p {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 15px;
+        }
+
+        .project-card .btn {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+
+        .project-card .btn:hover {
+            background-color: #555;
+        }
+
+        /* Footer Section */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #ffffff;
+            color: #888888;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="site-name">Home-Rev</div>
+        <nav>
+            <a href="{{ url_for('portfolio') }}" class="btn">Portfolio</a>
+            <a href="{{ url_for('logout') }}" class="btn">Logout</a>
+        </nav>
+    </header>
+
+    <!-- Portfolio Section -->
+    <div class="portfolio-container">
+        <div class="portfolio-header">
+            <h1>Your Portfolio</h1>
+        </div>
+
+        <!-- Profile Box -->
+        <div class="profile-box">
+            <h2>{{ user.username }}</h2>
+            <p>{{ user.bio or 'Add your bio to personalize your profile.' }}</p>
+
+            <form method="POST">
+                <textarea name="bio" placeholder="Edit your bio..." rows="4" class="input-field"></textarea>
+                <button type="submit" class="button">Update Profile</button>
+            </form>
+        </div>
+
+        <!-- Projects Section -->
+        <div class="project-box">
+            {% for project in projects %}
+            <div class="project-card">
+                <img src="{{ project.image_path }}" alt="{{ project.name }}">
+                <h3>{{ project.name }}</h3>
+                <p>{{ project.description }}</p>
+                <form action="{{ url_for('delete_project', project_id=project.id) }}" method="POST">
+                    <button type="submit" class="btn">Delete Project</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        &copy; 2024 Home-Rev
+    </footer>
+
+</body>
+</html>

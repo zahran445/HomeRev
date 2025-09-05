@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Room</title>
+    <style>
+        body { 
+            font-family: 'Poppins', sans-serif;
+            background-color: #f7f6f4; /* Light beige background from Home-Rev */
+            color: #333;
+        }
+        .chat-container { 
+            width: 60%; 
+            margin: 40px auto; 
+            background: #fff; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        h2 { 
+            text-align: center; 
+            color: #555;
+            font-weight: 600;
+        }
+        #chat-box { 
+            height: 400px; 
+            overflow-y: auto; 
+            border: 1px solid #ddd; 
+            padding: 15px; 
+            background-color: #fafafa;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .message {
+            padding: 12px;
+            background-color: #f0ece3; /* Light beige background for messages */
+            border-radius: 8px;
+            max-width: 75%; /* Limit the width of messages */
+            font-size: 14px;
+            line-height: 1.5;
+            word-wrap: break-word;
+            margin-left: 10px;
+        }
+        .message.sent {
+            background-color: #e8e8e8; /* Lighter background for sent messages */
+            align-self: flex-end;  /* Align sent messages to the right */
+        }
+        .message.received {
+            background-color: #d0d0d0; /* Slightly darker for received messages */
+            align-self: flex-start; /* Align received messages to the left */
+        }
+        .message strong { 
+            color: #007799; 
+            font-weight: 600;
+        }
+        .timestamp { 
+            font-size: 0.75em; 
+            color: #888; 
+            float: right;
+            margin-left: 10px;
+        }
+        .input-container {
+            display: flex;
+            align-items: center;
+        }
+        input[type="text"] { 
+            flex: 1; 
+            padding: 10px; 
+            border-radius: 4px; 
+            border: 1px solid #ddd;
+            margin-right: 10px;
+            font-size: 1em;
+        }
+        button { 
+            padding: 10px 20px; 
+            background-color: #333; /* Dark background to match Home-Rev theme */
+            color: #fff; 
+            border: none; 
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover { 
+            background-color: #555; /* Hover effect for button */
+        }
+    </style>
+</head>
+<body>
+    <style>
+        header {
+               display: flex;
+               justify-content: space-between;
+               align-items: center;
+               padding: 20px 40px;
+               background-color: #ffffff;
+               border-bottom: 1px solid #ddd;
+           }
+   
+           .site-name {
+               font-size: 28px;
+               font-weight: 600;
+               color: #000;
+           }
+   
+           nav a {
+               margin-left: 20px;
+               text-decoration: none;
+               color: #333;
+               font-weight: 500;
+               font-size: 16px;
+               transition: color 0.3s ease;
+           }
+   
+           nav a:hover {
+               color: #007799;
+           }
+   
+           nav .btn {
+               background-color: #333;
+               color: #fff;
+               padding: 10px 20px;
+               border-radius: 30px;
+               border: none;
+               font-weight: 500;
+               transition: background-color 0.3s ease;
+           }
+   
+           nav .btn:hover {
+               background-color: #555;
+           }
+   
+   </style>
+   
+   <header>
+       <div class="left-menu">
+           <span class="site-name">Home-Rev</span>
+       </div>
+       <nav class="right-menu">
+           <a href="{{ url_for('logout') }}">Logout</a>
+          </nav>
+   </header>
+    <div class="chat-container">
+        <h2>Chat with {{ project.name }}</h2>
+        <div id="chat-box">
+            {% for message in messages %}
+                <p class="message {% if message.sender.username == session['username'] %}sent{% else %}received{% endif %}">
+                    <strong>{{ message.sender.username }}:</strong> {{ message.content }}
+                    <span class="timestamp">{{ message.timestamp }}|{{message.created_at.strftime("%Y-%m-%d %H:%M:%S")}}</span>
+                </p>
+            {% endfor %}
+        </div>
+        <div class="input-container">
+            <input type="text" id="messageInput" placeholder="Enter message">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <script>
+        const socket = io.connect('http://127.0.0.1:5000');
+        const room = "{{ chat_room.user_id }}_{{ chat_room.uploader_id }}";  // Room ID based on user and uploader IDs
+        const username = "{{ session['username'] }}";
+
+        // Join the room and confirm in the console
+        socket.emit('join', { 'room': room, 'username': username });
+        console.log(`Attempting to join room: ${room}`);
+
+        socket.on('receive_message', function(data) {
+            console.log("Message received:", data);
+            const chatBox = document.getElementById('chat-box');
+            const messageElement = document.createElement('p');
+            messageElement.classList.add('message');
+            if (data.username === username) {
+                messageElement.classList.add('sent');
+            } else {
+                messageElement.classList.add('received');
+            }
+            messageElement.innerHTML = `<strong>${data.username}:</strong> ${data.message} <span class="timestamp">${data.timestamp}</span>`;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+            if (message) {
+                console.log("Sending message:", message);
+                socket.emit('send_message', {
+                    'message': message,
+                    'username': username,
+                    'room': room
+                });
+                messageInput.value = '';
+            }
+        }
+
+        document.getElementById('messageInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
